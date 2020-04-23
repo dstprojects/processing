@@ -29,13 +29,14 @@ class Dron {
     ang += avel;
     popMatrix();
     
-    println(pos.x + " " + pos.y);
+    //println(pos.x + " " + pos.y);
+    
     
     if(moving){
       
       dronMoving();
       
-    }//cierre de if moving
+    }
   }
   
   void moveDron(float x,float y, float t){
@@ -58,11 +59,6 @@ class Dron {
     
   }
   
-  void moveDronExact(){
-  
-    pos.x = 660;
-    pos.y = 460;
-  }
   
   void dronMoving(){
   
@@ -110,6 +106,6 @@ class Dron {
         }
       }// cierre comprabacion new x y son diferentes
   
-  }
+  }//cierre de dronMoving
   
 };

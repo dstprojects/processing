@@ -1,11 +1,34 @@
+import controlP5.*;
+
 Dron dr;
-ArrayList<TEXTBOX> textboxes = new ArrayList<TEXTBOX>();
+
+ControlP5 cp5;
+
+float currentX, currentY;
+float newX, newY;
 
 void setup() {
   size(displayWidth, displayHeight);
-  background(0);
+  background(120);
   dr = new Dron();
   dr.avel = PI/100;
+  
+  currentX = dr.pos.x;
+  currentY = dr.pos.y;
+  
+  newX = dr.pos.x;
+  newY = dr.pos.y;
+  
+  cp5 = new ControlP5(this);
+  cp5.addTextfield("New X").setPosition(width-120,20).setSize(100,30).setAutoClear(false);
+  cp5.addTextfield("New Y").setPosition(width-120,80).setSize(100,30).setAutoClear(false);
+  cp5.addTextfield("Time").setPosition(width-120,140).setSize(100,30).setAutoClear(false);
+  
+  cp5.addTextfield("Current X").setPosition(width-240,20).setSize(100,30).setAutoClear(false);
+  cp5.addTextfield("Current Y").setPosition(width-240,80).setSize(100,30).setAutoClear(false);
+
+  cp5.addBang("Submit").setPosition(width-120,200).setSize(50,30);
+  
 }
 
 
@@ -15,17 +38,23 @@ void draw() {
   rect(0, 0, width, height);
   
   dr.update();
+  
+  currentX = dr.pos.x;
+  currentY = dr.pos.y;
+    
+  cp5.get(Textfield.class,"Current X").setValue(nf(currentX,0,2));
+  cp5.get(Textfield.class,"Current Y").setValue(nf(currentY,0,2));
 
   if (pmouseX != 0 && pmouseY != 0) {
     stroke(255, 127);
     line(mouseX, mouseY, pmouseX, pmouseY);
   }
   
-  //dr.pos.x += 1;
-  //dr.pos.y +=1;
   
-  fill(255);
-  ellipse(100,100,5,5);
+  
+  fill(0);
+  stroke(255);
+  ellipse(newX,newY,5,5);
 }
 
 void keyPressed(){
@@ -33,28 +62,17 @@ void keyPressed(){
     saveFrame("dronDraw####.jpg");
   }
   
-  if( key == 'm'){
-  
-    dr.moveDron(100,100,10);
-  }
-  if( key == 'e'){
-  
-    dr.moveDronExact();
-  }
 }
 
-void InitLayout(){
-  TEXTBOX cordinateX = new TEXTBOX();
-  cordinateX.W = 100;
-  cordinateX.H = 20;
-  cordinateX.X = width-120;
-  cordinateX.Y = height-20;
+void Submit(){
   
-  TEXTBOX cordinateY = new TEXTBOX();
+  newX = parseInt(cp5.get(Textfield.class,"New X").getText());
+  newY = parseInt(cp5.get(Textfield.class,"New Y").getText());
+  float time = parseInt(cp5.get(Textfield.class,"Time").getText());
+
+  /*print("New x: "+newX+" ");
+  print("New y: "+newY+" ");
+  print("Time: "+time+" ");*/
   
-  TEXTBOX time = new TEXTBOX();
-  
-  TEXTBOX currentX = new TEXTBOX();
-  TEXTBOX currentY = new TEXTBOX();
-  
+  dr.moveDron(newX,newY,time);
 }
