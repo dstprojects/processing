@@ -1,18 +1,22 @@
 import controlP5.*;
 
 Dron dr;
+Trayectoria tr;
 
 ControlP5 cp5;
 
 float currentX, currentY, currentZ;
 float newX, newY, newZ;
 boolean sin = false;
+int trIndex = 0;
 
 void setup() {
   size(displayWidth, displayHeight);
   background(120);
   dr = new Dron();
   dr.avel = PI/50;
+  
+  tr = new Trayectoria();
   
   currentX = dr.pos.x;
   currentY = dr.pos.y;
@@ -34,6 +38,8 @@ void setup() {
 
   cp5.addBang("Submit").setPosition(width-120,260).setSize(50,30);
   cp5.addBang("Sine").setPosition(width-240,260).setSize(50,30);
+  cp5.addBang("Trayectoria").setPosition(width-240,200).setSize(50,30);
+
 
   
 }
@@ -58,6 +64,7 @@ void draw() {
     stroke(255, 127);
     line(mouseX, mouseY, pmouseX, pmouseY);
   }*/
+  
   
   if(sin){
     dr.moveSine();
@@ -92,4 +99,9 @@ void Submit(){
 
 void Sine(){
   sin = true;
+}
+
+void Trayectoria(){
+  
+  dr.moverTr();
 }

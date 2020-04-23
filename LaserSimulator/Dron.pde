@@ -15,6 +15,10 @@ class Dron {
   float newZ;
   float theta = 50;
   float seno = 0;
+  
+  float [][] trayectoria = {{100,100,1,2},{500,400,2,4},{800,200,1,6}};
+  int trIndex = 0;
+  boolean siTrayectoria = false;
 
   Dron() {
     pos = new PVector(660, 460,1);
@@ -72,6 +76,11 @@ class Dron {
   
       if(pos.x == newX && pos.y == newY && pos.z == newZ){
         moving = false;
+        if(siTrayectoria){
+          trIndex++;
+          this.moverTr();
+        }
+        
       }else{
         if(newX > pos.x){
         
@@ -147,6 +156,18 @@ class Dron {
     p2.x = (-theta+(sin(seno)*50))*pos.z;
     
     seno+=0.1;
+  }
+  
+  void moverTr(){
+    
+    siTrayectoria = true;
+    
+    if(trIndex < trayectoria.length){
+      this.moveDron(trayectoria[trIndex][0],trayectoria[trIndex][1],trayectoria[trIndex][2],trayectoria[trIndex][3]);
+    }else{
+      siTrayectoria = false;
+      trIndex=0;
+    }
   }
   
 };
