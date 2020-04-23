@@ -9,14 +9,18 @@ class Dron {
   boolean moving = false;
   float movingX = 0;
   float movingY = 0;
+  float movingZ = 0;
   float newX;
   float newY;
+  float newZ;
+  float theta = 50;
+  float seno = 0;
 
   Dron() {
-    pos = new PVector(660, 460);
+    pos = new PVector(660, 460,1);
     
-    p1 = new PVector(100, 0);
-    p2 = new PVector(-100, 0);
+    p1 = new PVector(theta, 0);
+    p2 = new PVector(-theta, 0);
   }
 
   void update() {
@@ -31,6 +35,7 @@ class Dron {
     
     //println(pos.x + " " + pos.y);
     
+    //println(pos.z);
     
     if(moving){
       
@@ -39,18 +44,21 @@ class Dron {
     }
   }
   
-  void moveDron(float x,float y, float t){
+  void moveDron(float x,float y, float z, float t){
   
-    if(x != pos.x || y != pos.y){
+    if(x != pos.x || y != pos.y || z != pos.z){
       
       newX = x;
       newY = y;
+      newZ = z;
       
       float moveX = x - pos.x;
       float moveY = y - pos.y;
+      float moveZ = z - pos.z;
       
       movingX = (moveX/frameRate)/t;
       movingY = (moveY/frameRate)/t;
+      movingZ = (moveZ/frameRate)/t;
       
       moving = true;
       
@@ -62,7 +70,7 @@ class Dron {
   
   void dronMoving(){
   
-      if(pos.x == newX && pos.y == newY){
+      if(pos.x == newX && pos.y == newY && pos.z == newZ){
         moving = false;
       }else{
         if(newX > pos.x){
@@ -104,8 +112,41 @@ class Dron {
             }
           }
         }
+        
+        if(newZ > pos.z){
+        
+          if(pos.z != newZ){
+            if(pos.z+movingZ > newZ){
+              pos.z = newZ;
+            }else{
+              pos.z += movingZ;
+            }
+          }
+        }else if(newZ < pos.z){
+        
+          if(pos.z != newZ){
+            if(pos.z+movingZ < newZ){
+              pos.z = newZ;
+            }else{
+              pos.z += movingZ;
+            }
+          }
+        }
+        
+        
       }// cierre comprabacion new x y son diferentes
-  
+      
+      p1.x = theta*pos.z;
+      p2.x = -theta*pos.z;
+      
   }//cierre de dronMoving
+  
+  void moveSine(){
+  
+    p1.x = (theta+(sin(seno)*50))*pos.z;
+    p2.x = (-theta+(sin(seno)*50))*pos.z;
+    
+    seno+=0.1;
+  }
   
 };
