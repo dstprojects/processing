@@ -1,22 +1,20 @@
 import controlP5.*;
 
 Dron dr;
-Trayectoria tr;
 
 ControlP5 cp5;
 
 float currentX, currentY, currentZ;
 float newX, newY, newZ;
-boolean sin = false;
 int trIndex = 0;
 
 void setup() {
   size(displayWidth, displayHeight);
+  frameRate(20);
   background(120);
   dr = new Dron();
   dr.avel = PI/50;
   
-  tr = new Trayectoria();
   
   currentX = dr.pos.x;
   currentY = dr.pos.y;
@@ -66,13 +64,17 @@ void draw() {
   }*/
   
   
-  if(sin){
+  /*if(sin){
     dr.moveSine();
-  }
+  }else{
+    dr.stopSine();
+  }*/
   
   fill(0);
   stroke(255);
   ellipse(newX,newY,5,5);
+  
+  //println(frameRate);
 }
 
 void keyPressed(){
@@ -98,10 +100,20 @@ void Submit(){
 }
 
 void Sine(){
-  sin = true;
+  if(dr.sine == true){
+    dr.p1.x = dr.theta*dr.pos.z;
+    dr.p2.x = -dr.theta*dr.pos.z;
+    dr.seno = 0;
+  }
+  dr.sine = !dr.sine;
 }
 
 void Trayectoria(){
   
+  dr.startTime = millis();
+  dr.startTime1 = millis();
+  dr.startTime2 = millis();
+  
   dr.moverTr();
+  dr.laserOnOff();
 }

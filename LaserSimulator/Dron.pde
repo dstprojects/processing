@@ -5,6 +5,8 @@ class Dron {
   PVector p2 = new PVector();
   float avel = 0;
   float ang = 0;
+  boolean laser1 = false;
+  boolean laser2 = true;
   
   boolean moving = false;
   float movingX = 0;
@@ -15,37 +17,60 @@ class Dron {
   float newZ;
   float theta = 50;
   float seno = 0;
+  boolean sine = false;
   
   float [][] trayectoria = {{100,100,1,2},{500,400,2,4},{800,200,1,6}};
   int trIndex = 0;
   boolean siTrayectoria = false;
+    
+  int startTime;
+  int startTime1;
+  int startTime2;
+  
+  int[] times1 = {2000,4000,6000};
+  int[] times2 = {2000,4000,6000};
+  int timesIndex1 = 0;
+  int timesIndex2 = 0;
 
   Dron() {
     pos = new PVector(660, 460,1);
     
     p1 = new PVector(theta, 0);
     p2 = new PVector(-theta, 0);
+        
   }
 
   void update() {
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(ang);
-    fill(255);
-    ellipse(p1.x, p1.y, 5, 5);
-    ellipse(p2.x, p2.y, 5, 5);
+    if(laser1){
+      fill(0,255,0);
+      ellipse(p1.x, p1.y, 5, 5);
+    }
+    if(laser2){
+      fill(255,0,0);
+      ellipse(p2.x, p2.y, 5, 5);
+    }
     ang += avel;
     popMatrix();
     
-    //println(pos.x + " " + pos.y);
-    
-    //println(pos.z);
+    //println(millis());
     
     if(moving){
       
       dronMoving();
       
     }
+    
+    if(sine){
+      moveSine();
+    }
+
+    if(siTrayectoria){
+      laserOnOff();
+    }
+    
   }
   
   void moveDron(float x,float y, float z, float t){
@@ -80,6 +105,8 @@ class Dron {
           trIndex++;
           this.moverTr();
         }
+        println(millis()-startTime);
+        startTime = millis();
         
       }else{
         if(newX > pos.x){
@@ -158,6 +185,7 @@ class Dron {
     seno+=0.1;
   }
   
+  
   void moverTr(){
     
     siTrayectoria = true;
@@ -167,7 +195,36 @@ class Dron {
     }else{
       siTrayectoria = false;
       trIndex=0;
+      timesIndex1=0;
+      timesIndex2=0;
     }
   }
+  
+  void laserOnOff(){
+    
+    if((millis()-startTime1) > times1[timesIndex1] ){
+      laser1 = !laser1;
+      //println("laser1: "+(millis()-startTime1));
+      startTime1 = millis();
+      timesIndex1++;
+      if(timesIndex1 >= times1.length){
+        timesIndex1 = 0;
+      }
+    }
+    
+    if((millis()-startTime2) > times2[timesIndex2] ){
+      laser2 = !laser2;
+      //println("laser2: "+(millis()-startTime2));
+      startTime2 = millis();
+      timesIndex2++;
+      if(timesIndex2 >= times2.length){
+        timesIndex2 = 0;
+      }
+    }
+
+    
+  }
+  
+  
   
 };
